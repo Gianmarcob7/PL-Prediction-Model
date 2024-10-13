@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premier League Match Predictions</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://media.istockphoto.com/id/468307148/photo/backgrounds.jpg?s=612x612&w=0&k=20&c=N490_eIZD2h0zlhNEMrGqN5qQAu48Y5EUzTa2C7jqC0=');
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 90%;
+        }
+        h1 {
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        label {
+            font-weight: 600;
+            color: #333;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #1e3c72;
+            border-radius: 5px;
+            font-size: 16px;
+            appearance: none;
+            background: url('data:image/svg+xml;utf8,<svg fill="%231e3c72" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat;
+            background-position: right 10px top 10%;
+        }
+        input[type="submit"] {
+            background-color: #1e3c72;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #2a5298;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #1e3c72;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e6e6e6;
+        }
+        caption {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1e3c72;
+            font-size: 1.2em;
+        }
+        .form-guides {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-guide {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-guide h3 {
+            margin-top: 0;
+            color: #1e3c72;
+            justify-content: center;
+            align-items: center;
+        }
+        .result-circles {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .result-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+        }
+        .result-W { background-color: #2ecc71; }
+        .result-D { background-color: #f1c40f; }
+        .result-L { background-color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Soccer Match Predictor (2022 Season)</h1>
+        
+        <div class="form-guides">
+            <div id="homeFormGuide" class="form-guide">
+                <h3>Home Team Form</h3>
+                <div class="result-circles"></div>
+            </div>
+            <div id="awayFormGuide" class="form-guide">
+                <h3>Away Team Form</h3>
+                <div class="result-circles"></div>
+            </div>
+        </div>
+
+        <form action="/predict" method="post">
+            <label for="home_team">Home Team:</label>
+            <select id="home_team" name="home_team" required>
+                {% for team in teams %}
+                    <option value="{{ team }}">{{ team }}</option>
+                {% endfor %}
+            </select>
+            <label for="away_team">Away Team:</label>
+            <select id="away_team" name="away_team" required>
+                {% for team in teams %}
+                    <option value="{{ team }}">{{ team }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Predict Match">
+        </form>
+        <table>
+            <caption>Premier League Standings 2022-23</caption>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Club</th>
+                    <th>MP</th>
+                    <th>W</th>
+                    <th>D</th>
+                    <th>L</th>
+                    <th>GF</th>
+                    <th>GA</th>
+                    <th>GD</th>
+                    <th>Pts</th>
+                    <th>Last 5</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Man City</td>
+                    <td>38</td>
+                    <td>28</td>
+                    <td>5</td>
+                    <td>5</td>
+                    <td>94</td>
+                    <td>33</td>
+                    <td>61</td>
+                    <td>89</td>
+                    <td>WWWWL</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Arsenal</td>
+                    <td>38</td>
+                    <td>26</td>
+                    <td>6</td>
+                    <td>6</td>
+                    <td>88</td>
+                    <td>43</td>
+                    <td>45</td>
+                    <td>84</td>
+                    <td>WWLLW</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Man United</td>
+                    <td>38</td>
+                    <td>23</td>
+                    <td>6</td>
+                    <td>9</td>
+                    <td>58</td>
+                    <td>43</td>
+                    <td>15</td>
+                    <td>75</td>
+                    <td>LWWWW</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Newcastle</td>
+                    <td>38</td>
+                    <td>19</td>
+                    <td>14</td>
+                    <td>5</td>
+                    <td>68</td>
+                    <td>33</td>
+                    <td>35</td>
+                    <td>71</td>
+                    <td>LDWDW</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Liverpool</td>
+                    <td>38</td>
+                    <td>19</td>
+                    <td>10</td>
+                    <td>9</td>
+                    <td>75</td>
+                    <td>47</td>
+                    <td>28</td>
+                    <td>67</td>
+                    <td>WWWDD</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Brighton</td>
+                    <td>38</td>
+                    <td>18</td>
+                    <td>8</td>
+                    <td>12</td>
+                    <td>72</td>
+                    <td>53</td>
+                    <td>19</td>
+                    <td>62</td>
+                    <td>LWLWL</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Aston Villa</td>
+                    <td>38</td>
+                    <td>18</td>
+                    <td>7</td>
+                    <td>13</td>
+                    <td>51</td>
+                    <td>46</td>
+                    <td>5</td>
+                    <td>61</td>
+                    <td>LLWLW</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Tottenham</td>
+                    <td>38</td>
+                    <td>18</td>
+                    <td>6</td>
+                    <td>14</td>
+                    <td>70</td>
+                    <td>63</td>
+                    <td>7</td>
+                    <td>60</td>
+                    <td>LWLLW</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Brentford</td>
+                    <td>38</td>
+                    <td>15</td>
+                    <td>14</td>
+                    <td>9</td>
+                    <td>58</td>
+                    <td>46</td>
+                    <td>12</td>
+                    <td>59</td>
+                    <td>WLWWW</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Fulham</td>
+                    <td>38</td>
+                    <td>15</td>
+                    <td>7</td>
+                    <td>16</td>
+                    <td>55</td>
+                    <td>53</td>
+                    <td>2</td>
+                    <td>52</td>
+                    <td>LWWLD</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>Crystal Palace</td>
+                    <td>38</td>
+                    <td>11</td>
+                    <td>12</td>
+                    <td>15</td>
+                    <td>40</td>
+                    <td>49</td>
+                    <td>-9</td>
+                    <td>45</td>
+                    <td>LWLDD</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>Chelsea</td>
+                    <td>38</td>
+                    <td>11</td>
+                    <td>11</td>
+                    <td>16</td>
+                    <td>38</td>
+                    <td>47</td>
+                    <td>-9</td>
+                    <td>44</td>
+                    <td>WLDLD</td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>Wolves</td>
+                    <td>38</td>
+                    <td>11</td>
+                    <td>10</td>
+                    <td>17</td>
+                    <td>34</td>
+                    <td>53</td>
+                    <td>-19</td>
+                    <td>43</td>
+                    <td>WLDWL</td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>Everton</td>
+                    <td>38</td>
+                    <td>11</td>
+                    <td>10</td>
+                    <td>17</td>
+                    <td>35</td>
+                    <td>58</td>
+                    <td>-23</td>
+                    <td>43</td>
+                    <td>LWWLD</td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>Nottingham Forest</td>
+                    <td>38</td>
+                    <td>9</td>
+                    <td>13</td>
+                    <td>16</td>
+                    <td>33</td>
+                    <td>55</td>
+                    <td>-22</td>
+                    <td>40</td>
+                    <td>DWLLD</td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td>West Ham</td>
+                    <td>38</td>
+                    <td>10</td>
+                    <td>9</td>
+                    <td>19</td>
+                    <td>35</td>
+                    <td>60</td>
+                    <td>-25</td>
+                    <td>39</td>
+                    <td>LLLDW</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>Bournemouth</td>
+                    <td>38</td>
+                    <td>10</td>
+                    <td>8</td>
+                    <td>20</td>
+                    <td>34</td>
+                    <td>70</td>
+                    <td>-36</td>
+                    <td>38</td>
+                    <td>LDLLD</td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td>Sheffield United</td>
+                    <td>38</td>
+                    <td>7</td>
+                    <td>11</td>
+                    <td>20</td>
+                    <td>30</td>
+                    <td>65</td>
+                    <td>-35</td>
+                    <td>32</td>
+                    <td>LDLWL</td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td>Luton Town</td>
+                    <td>38</td>
+                    <td>5</td>
+                    <td>8</td>
+                    <td>25</td>
+                    <td>27</td>
+                    <td>82</td>
+                    <td>-55</td>
+                    <td>23</td>
+                    <td>WLWDL</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>Burnley</td>
+                    <td>38</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>29</td>
+                    <td>25</td>
+                    <td>85</td>
+                    <td>-60</td>
+                    <td>17</td>
+                    <td>LWLWL</td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+
+        const teamData = {
+            "Manchester City": { form: ["W", "W", "W", "W", "L"] },
+            "Arsenal": { form: ["W", "W", "L", "L", "W"] },
+            "Manchester United": { form: ["L", "W", "W", "W", "W"] },
+            "Newcastle": { form: ["L", "D", "W", "D", "W"] },
+            "Liverpool": { form: ["W", "W", "W", "D", "D"] },
+            "Brighton": { form: ["L", "W", "L", "W", "L"] },
+            "Aston Villa": { form: ["L", "L", "W", "L", "W"] },
+            "Tottenham": { form: ["L", "W", "L", "L", "W"] },
+            "Brentford": { form: ["W", "L", "W", "W", "W"] },
+            "Fulham": { form: ["L", "W", "W", "L", "D"] },
+            "Crystal Palace": { form: ["L", "W", "L", "D", "D"] },
+            "Chelsea": { form: ["W", "L", "D", "L", "D"] },
+            "Wolves": { form: ["W", "L", "D", "W", "L"] },
+            "West Ham": { form: ["L", "L", "L", "D", "W"] },
+            "Bournemouth": { form: ["L", "D", "L", "L", "D"] },
+            "Nottingham Forest": { form: ["D", "W", "L", "L", "D"] },
+            "Everton": { form: ["L", "W", "W", "L", "D"] },
+            "Leicester": { form: ["L", "D", "L", "W", "L"] },
+            "Leeds": { form: ["L", "D", "L", "L", "D"] },
+            "Southampton": { form: ["L", "L", "L", "D", "L"] }
+        };
+
+        function updateFormGuide(teamId, team) {
+            const formGuide = document.getElementById(`${teamId}FormGuide`);
+            const resultCircles = formGuide.querySelector('.result-circles');
+            formGuide.querySelector('h3').textContent = `${team} Form`;
+            resultCircles.innerHTML = '';
+            
+            if (teamData[team]) {
+                teamData[team].form.forEach(result => {
+                    const circle = document.createElement('div');
+                    circle.className = `result-circle result-${result}`;
+                    circle.textContent = result;
+                    resultCircles.appendChild(circle);
+                });
+            }
+        }
+
+        document.getElementById('home_team').addEventListener('change', (e) => {
+            updateFormGuide('home', e.target.value);
+        });
+
+        document.getElementById('away_team').addEventListener('change', (e) => {
+            updateFormGuide('away', e.target.value);
+        });
+    </script>
+</body>
+</html>

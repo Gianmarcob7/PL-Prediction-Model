@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 {
+            color: #1e3c72;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .prediction {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e3c72;
+            margin: 20px 0;
+        }
+        .accuracy {
+            font-size: 16px;
+            color: #666;
+        }
+        a {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background-color: #1e3c72;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #2a5298;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        <p>Match: {{ home_team }} vs {{ away_team }}</p>
+        <p class="prediction">Prediction: {{ prediction }}</p>
+        <p class="accuracy">Model Accuracy: 78.95%</p>
+        <a href="/">Predict Another Match</a>
+    </div>
+</body>
+</html>
